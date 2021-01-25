@@ -69,13 +69,6 @@ const bookingData = [
      "endTime": "2019-10-06 11:00:00",
      "title": "3-day workshop Corgi costume"
    },
-   {
-    "id": 11,
-    "roomId": "A101",
-    "startTime": "2021-01-23 10:00:00",
-    "endTime": "2021-01-23 11:00:00",
-    "title": "3-day workshop Corgi costume"
-  }
  ];
 
  module.exports = { bookingData };

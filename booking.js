@@ -1,51 +1,50 @@
 const { bookingData } = require("./data/bookingData");
-const dayjs = require("dayjs");
-const weekOfYear = require('dayjs/plugin/weekOfYear')
+const dayjs = require("dayjs")
+const weekOfYear = require('dayjs/plugin/weekOfYear');
 dayjs.extend(weekOfYear);
 
 //2a.
 const checkAvailability = (roomId, startTime, endTime) => {
-   const result = bookingData
-      .filter(room => room.roomId === roomId)
-      .map(booking => {
-         if (startTime < booking.startTime && endTime <= booking.startTime) {
-            return true;
-         } else if (startTime >= booking.endTime) {
-            return true;
-         } else {
-            return false;
-         };
-      });
+   const targetRoom = bookingData.filter(room => room.roomId === roomId);
+   console.log(targetRoom);
+
+   const result = targetRoom.map(booking => {
+      if (startTime < booking.startTime && endTime <= booking.startTime) {
+         return true;
+      } else if (startTime >= booking.endTime) {
+         return true;
+      } else {
+         return false;
+      }
+   });
 
    for (const res of result) {
       if (res === false) {
-         return false
+         return false;
       }
    };
    return true;
+   //console.log(result);
 };
-//console.log(checkAvailability("A102", "2019-09-30 13:00:00", "2019-09-30 16:00:00"));
-
+//checkAvailability("A101", "2019-09-28 13:00:00", "2019-09-28 14:00:00")
+//console.log(checkAvailability("A101", "2019-09-28 18:00:00", "2019-09-29 13:00:00"));
 
 //2b.
-const getBookingsForWeek = (roomId, weekNo) => {
-  
-   const targetRoom =  bookingData.filter(room => room.roomId === roomId);
+const getBookingForWeek = (roomId, weekNo) => {
+   const targetRoom = bookingData.filter(room => room.roomId === roomId);
    const allDay = targetRoom
-   .filter(roomList => dayjs(roomList.startTime).format("YYYY-MM-DD") === weekNo);
-
+   .filter(day => dayjs(day.startTime).format("YYYY-MM-DD") === dayjs(weekNo).format("YYYY-MM-DD"));
    const thisWeek = targetRoom
-   .filter(roomList => dayjs(roomList.startTime).week() === dayjs(weekNo).week());
-
+   .filter(day => dayjs(day.startTime).week() === dayjs(weekNo).week());
    const nextWeek = targetRoom
-   .filter(roomList => dayjs(roomList.startTime).week() === dayjs(weekNo).week() + 1);
-   
+   .filter(day => dayjs(day.startTime).week() === dayjs(weekNo).week() +1);
    const wholeMonth = targetRoom
-   .filter(roomList => dayjs(roomList.startTime).month() === dayjs(weekNo).month());
-   
-   return { allDay, thisWeek, nextWeek, wholeMonth }
-};
+   .filter(day => dayjs(day.startTime).month() === dayjs(weekNo).month());
 
-const result = getBookingsForWeek("A101", "2019-09-28");
-console.log(result);
+   return { allDay, thisWeek, nextWeek, wholeMonth }
+}
+
+const {allDay, thisWeek} = getBookingForWeek("A101", "2019-09-28");
+console.log(allDay);
+console.log(thisWeek);
 
